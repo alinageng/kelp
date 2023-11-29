@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 import json
-from src import db
-
+from .. import db
 
 customers = Blueprint('customers', __name__)
 
@@ -9,8 +8,8 @@ customers = Blueprint('customers', __name__)
 @customers.route('/customers', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
-    cursor.execute('select company, last_name,\
-        first_name, job_title, business_phone from customers')
+    cursor.execute('SELECT company, last_name,\
+        first_name, job_title, business_phone FROM customers')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
