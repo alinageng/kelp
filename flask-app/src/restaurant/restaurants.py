@@ -10,7 +10,8 @@ def get_restaurants():
     cursor = db.get_db().cursor()
     # cursor.execute('SELECT company, last_name,\
     #     first_name, job_title, business_phone FROM customers')
-    cursor.execute('SELECT * FROM Restaurant')
+    cursor.execute('SELECT restaurant_name, description, hours, street, address_line_2, city, state \
+            FROM Restaurant r join Address a on r.address = a.address_id')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -28,24 +29,42 @@ def add_new_restaurant():
     the_data = request.json
     current_app.logger.info(the_data)
 
-    # extracting the variable
-    id = the_data['restaurant_id']
-    name = the_data['restaurant_name']
-    description = the_data['description']
-    hours = the_data['hours']  #TODO what datatype is this??
-    address = the_data['address']   # TODO address is a composite attribute; also need to insert into address table
+    # insert into Address
+    street = the_data['street']
+    address_line_2 = the_data['address_line_2']
+    city = the_data['city']
+    state = the_data['state']
 
-    # Constructing the query into Restaurant Table
-    query = 'insert into Restaurant (id, name, description, hours) values ("'
-    query += id + '", "'
-    query += name + '", "'
-    query += description + '", '
-    query += hours + ')'
+
+    query = "INSERT INTO Address (street, address_line_2, city, state) VALUES ('"
+    query += street + "','"
+    query += address_line_2 + "','"
+    query += city + "','"
+    query += state + "')"
+
+    print(query)
     current_app.logger.info(query)
 
-    # TODO construct query into Address Table
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
 
-    # executing and committing the insert statement
+    # get address id
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    address = cursor.fetchone()[0]
+
+    name = the_data['restaurant_name']
+    description = the_data['description']
+    hours = the_data['hours']
+
+    # Constructing the query into Restaurant Table
+    query = "insert into Restaurant (restaurant_name, description, hours, address) values ('"
+    query += name + "','"
+    query += description + "','"
+    query += hours + "','"
+    query += str(address) + "')"
+    current_app.logger.info(query)
+
     cursor = db.get_db().cursor()
     cursor.execute(query)
     db.get_db().commit()
