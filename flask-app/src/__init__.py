@@ -38,6 +38,7 @@ def create_app():
     # from .products.products import products
     from .customers.customers import customers
     from .restaurant.restaurants import restaurants
+    from .health_inspections.health_inspections import health_inspections
 
 
     # Register the routes from each Blueprint with the app object
