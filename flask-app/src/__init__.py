@@ -47,6 +47,7 @@ def create_app():
     #TODO review also starts with r
     app.register_blueprint(customers, url_prefix='/c')
     app.register_blueprint(restaurants, url_prefix='/r')
+    app.register_blueprint(health_inspections, url_prefix='/hi')
 
 
     # Don't forget to return the app object

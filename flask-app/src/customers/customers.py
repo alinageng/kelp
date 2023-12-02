@@ -21,17 +21,14 @@ def get_customers():
 
 # Get customer detail for customer with particular customerID
 @customers.route('/customers/<customer_id>', methods=['GET'])
-def get_customer(customerID):
-    query =
-        'SELECT *' +
-        'FROM RestaurantReview' +
-        'WHERE RestaurantReview.customer_id =' + str(customer_id) +
-        'GROUP BY restaurant_id'
-        'UNION' +
-        'SELECT *' +
-        'FROM MenuItemReview' +
-        'WHERE MenuItemReview.customer_id =' + str(customer_id) +
-        'GROUP BY menu_item_id'
+def get_customer(customer_id):
+    query = ("SELECT * " + "FROM RestaurantReview " + "WHERE RestaurantReview.customer_id = " + str(customer_id) +
+        #" GROUP BY restaurant_id " +
+        " UNION " +
+        "SELECT * " +
+        "FROM MenuItemReview " +
+        "WHERE MenuItemReview.customer_id = " + str(customer_id))
+        #" GROUP BY menu_item_id ")
 
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -49,16 +46,14 @@ def get_customer(customerID):
 @customers.route('/customers/<customer_id>', methods=['DELETE'])
 def delete_customer(customer_id):
     try:
-        query =
-            'DELETE FROM Customer' +
-            'WHERE customer_id = ' + str(customer_id)
+        query = 'DELETE FROM Customer WHERE customer_id = ' + str(customer_id)
 
         cursor = db.get_db().cursor()
         cursor.execute(query)
         db.get_db().commit()
 
         response_data = {
-            'message': f'Successfully deleted customer with customer_id {customer_id}',
+            'message': 'Successfully deleted customer',
             'status': 200
         }
         return jsonify(response_data), 200

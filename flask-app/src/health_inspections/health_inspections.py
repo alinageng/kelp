@@ -2,16 +2,13 @@ from flask import Blueprint, request, jsonify, make_response
 import json
 from .. import db
 
-customers = Blueprint('health_inspections', __name__)
+health_inspections = Blueprint('health_inspections', __name__)
 
 # Get all health inspections from the DB
 @health_inspections.route('/health_inspections', methods=['GET'])
 def get_health_inspections():
-    query = '''
-        SELECT *
-        FROM HealthInspection
-        GROUP BY restaurant_id
-        '''
+    query = 'SELECT * FROM HealthInspection'
+
 
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -28,10 +25,9 @@ def get_health_inspections():
 # Get health inspection detail for a restaurant with particular restaurant_id
 @health_inspections.route('/health_inspections/<restaurant_id>', methods=['GET'])
 def get_health_inspection(restaurant_id):
-    query =
-        'SELECT *' +
+    query = ('SELECT *' +
         'FROM HealthInspection' +
-        'WHERE HealthInspection.restaurant_id =' + str(restaurant_id)
+        'WHERE HealthInspection.restaurant_id =' + str(restaurant_id))
 
     cursor = db.get_db().cursor()
     cursor.execute(query)
