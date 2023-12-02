@@ -72,18 +72,13 @@ def update_restaurant(id):
 
     cursor = db.get_db().cursor()
     cursor.execute('SELECT address FROM Restaurant WHERE restaurant_id =' + str(id))
-    address_id = cursor.fetchall()
-    print("LOOK HERE")
-    print(address_id)
+    address_id = cursor.fetchone()[0]
 
     query = ("UPDATE Address " +
              "SET street = '" + street + "'," + "address_line_2 = '" + address_line_2 + "'," + "city = '" + city +
-             "'," + "state = '" + state + '" ' +
+             "'," + "state = '" + state + "' " +
              "WHERE address_id = " + str(address_id))
-    # current_app.logger.info(query)
-    print("CHECK: " + query)
-
-
+    current_app.logger.info(query)
     cursor = db.get_db().cursor()
     cursor.execute(query)
     db.get_db().commit()
