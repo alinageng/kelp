@@ -10,8 +10,7 @@ def get_customers():
     cursor = db.get_db().cursor()
     # cursor.execute('SELECT company, last_name,\
     #     first_name, job_title, business_phone FROM customers')
-    cursor.execute('SELECT company, last_name,\
-            first_name, job_title, business_phone FROM customers')
+    cursor.execute('SELECT  FROM customers')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
