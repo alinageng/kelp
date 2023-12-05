@@ -1,4 +1,3 @@
--- Additional 50 Restaurant table rows (sample data based on Address table)
 INSERT INTO Restaurant (restaurant_name, description, hours, address) VALUES
 ('Mamas Kitchen', 'Homestyle cooking at its best!', 'Mon-Sat: 8am-9pm, Sun: 9am-8pm', 2),
 ('Pasta Paradise', 'Italian delicacies served daily.', 'Mon-Fri: 11:30am-10pm, Sat-Sun: 12pm-9pm', 7),
