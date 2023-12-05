@@ -19,28 +19,6 @@ def get_customers():
     the_response.mimetype = 'application/json'
     return the_response
 
-# Get customer detail for customer with particular customerID
-@customers.route('/customers/<customer_id>', methods=['GET'])
-def get_customer(customer_id):
-    query = ("SELECT * " + "FROM RestaurantReview " + "WHERE RestaurantReview.customer_id = " + str(customer_id) +
-        #" GROUP BY restaurant_id " +
-        " UNION " +
-        "SELECT * " +
-        "FROM MenuItemReview " +
-        "WHERE MenuItemReview.customer_id = " + str(customer_id))
-        #" GROUP BY menu_item_id ")
-
-    cursor = db.get_db().cursor()
-    cursor.execute(query)
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
 
 # delete a customer with given customer_id
 @customers.route('/customers/<customer_id>', methods=['DELETE'])
@@ -64,3 +42,33 @@ def delete_customer(customer_id):
             'status': 500
         }
         return jsonify(error_message), 500
+
+
+# # post a new review for a restaurant
+# @customers.route('/customers/<customer_id>/reviews/<restaurant_id>', methods=['POST'])
+# def post_a_restaurant_review():
+#
+#     # collecting data from the request object
+#     the_data = request.json
+#     current_app.logger.info(the_data)
+#
+#     #extracting the variable
+#     name = the_data['product_name']
+#     description = the_data['product_description']
+#     price = the_data['product_price']
+#     category = the_data['product_category']
+#
+#     # Constructing the query
+#     query = 'insert into products (product_name, description, category, list_price) values ("'
+#     query += name + '", "'
+#     query += description + '", "'
+#     query += category + '", '
+#     query += str(price) + ')'
+#     current_app.logger.info(query)
+#
+#     # executing and committing the insert statement
+#     cursor = db.get_db().cursor()
+#     cursor.execute(query)
+#     db.get_db().commit()
+#
+#     return 'Success!'

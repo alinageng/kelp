@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from .. import db
 
@@ -25,9 +25,7 @@ def get_health_inspections():
 # Get health inspection detail for a restaurant with particular restaurant_id
 @health_inspections.route('/health_inspections/<restaurant_id>', methods=['GET'])
 def get_health_inspection(restaurant_id):
-    query = ('SELECT *' +
-        'FROM HealthInspection' +
-        'WHERE HealthInspection.restaurant_id =' + str(restaurant_id))
+    query = 'SELECT * FROM HealthInspection WHERE restaurant_id = ' + str(restaurant_id)
 
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -42,7 +40,7 @@ def get_health_inspection(restaurant_id):
     return the_response
 
 # post a health inspection for a restaurant
-@health_inspections.route('/health_inspections/<restaurant_id>', methods=['POST'])
+@health_inspections.route('/health_inspections', methods=['POST'])
 def add_new_health_inspection():
 
     # collecting data from the request object
@@ -57,12 +55,13 @@ def add_new_health_inspection():
     grade = the_data['grade']
 
     # Constructing the query
-    query = 'insert into HealthInspection (health_inspection_id, inspector_id, restaurant_id, date, grade) values ("'
-    query += str(health_inspection_id) + '", "'
-    query += str(inspector_id) + '", "'
-    query += str(restaurant_id) + '", '
+    query = 'insert into HealthInspection (health_inspection_id, inspector_id, restaurant_id, date, grade) values ('
+    query += str(health_inspection_id) + ', '
+    query += str(inspector_id) + ', '
+    query += str(restaurant_id) + ', "'
     query += str(date) + '", '
     query += str(grade) + ')'
+    print(query)
     current_app.logger.info(query)
 
     # executing and committing the insert statement
