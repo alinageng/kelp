@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS KelpAdmin (
     first_name varchar(50) NOT NULL,
     last_name varchar(50) NOT NULL,
     email varchar(50) NOT NULL UNIQUE,
-    phone int(10)
+    phone varchar(10)
 );
 
 CREATE TABLE IF NOT EXISTS Address (
