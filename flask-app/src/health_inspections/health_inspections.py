@@ -48,15 +48,13 @@ def add_new_health_inspection():
     current_app.logger.info(the_data)
 
     #extracting the variable
-    health_inspection_id = the_data['health_inspection_id']
     inspector_id = the_data['inspector_id']
     restaurant_id = the_data['restaurant_id']
     date = the_data['date']
     grade = the_data['grade']
 
     # Constructing the query
-    query = 'insert into HealthInspection (health_inspection_id, inspector_id, restaurant_id, date, grade) values ('
-    query += str(health_inspection_id) + ', '
+    query = 'insert into HealthInspection (inspector_id, restaurant_id, date, grade) values ('
     query += str(inspector_id) + ', '
     query += str(restaurant_id) + ', "'
     query += str(date) + '", '
