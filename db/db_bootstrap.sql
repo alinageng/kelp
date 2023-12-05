@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Customer (
     first_name varchar(50) NOT NULL,
     last_name varchar(50) NOT NULL,
     email varchar(50) NOT NULL UNIQUE,
-    phone int(10),
+    phone varchar(10),
     member_since datetime DEFAULT NOW()
 );
 
@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS Restaurant (
     description text,
     hours text,
     address int,
-    FOREIGN KEY (address) REFERENCES  Address (address_id)
-    ON UPDATE cascade ON DELETE restrict
+    FOREIGN KEY (address) REFERENCES Address (address_id)
+    ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE IF NOT EXISTS RestaurantOwnerAccount (
@@ -108,33 +108,31 @@ CREATE TABLE IF NOT EXISTS RestaurantReview (
     ON UPDATE cascade ON DELETE restrict
 );
 
-CREATE TABLE IF NOT EXISTS MenuItemReview (
-    menu_item_review_id int PRIMARY KEY AUTO_INCREMENT,
-    menu_item_id int,
-    customer_id int,
-    restaurant_id int,
-    description text,
-    rating tinyint(1) NOT NULL,
-    date datetime DEFAULT NOW(),
-    FOREIGN KEY (customer_id) REFERENCES Customer (customer_id)
-    ON UPDATE cascade ON DELETE restrict,
-    FOREIGN KEY (restaurant_id) REFERENCES  Restaurant (restaurant_id)
-    ON UPDATE cascade ON DELETE restrict
+CREATE TABLE IF NOT EXISTS MenuItem (
+    menu_item_id int PRIMARY KEY AUTO_INCREMENT,
+    name varchar(50),
+    menu_type varchar(25)
 );
 
 CREATE TABLE IF NOT EXISTS Menu (
     menu_id int PRIMARY KEY AUTO_INCREMENT,
     restaurant_id int,
-    menu_type varchar(25),
-    FOREIGN KEY (restaurant_id) REFERENCES  Restaurant (restaurant_id)
-    ON UPDATE cascade ON DELETE restrict
+    menu_item_id int,
+    price int,
+    FOREIGN KEY (restaurant_id) REFERENCES Restaurant (restaurant_id)
+    ON UPDATE cascade ON DELETE cascade,
+    FOREIGN KEY (menu_item_id) REFERENCES MenuItem (menu_item_id)
+    ON UPDATE cascade ON DELETE cascade
 );
 
-CREATE TABLE IF NOT EXISTS MenuItem (
-    menu_item_id int PRIMARY KEY AUTO_INCREMENT,
-    menu_id int,
-    name varchar(50),
-    price int,
-    FOREIGN KEY (menu_id) REFERENCES Menu (menu_id)
+CREATE TABLE IF NOT EXISTS MenuItemReview (
+    menu_item_review_id int PRIMARY KEY AUTO_INCREMENT,
+    menu_item_id int,
+    review_id int,
+    description text,
+    rating tinyint(1) NOT NULL,
+    FOREIGN KEY (menu_item_id) REFERENCES MenuItem (menu_item_id)
+    ON UPDATE cascade ON DELETE restrict,
+    FOREIGN KEY (review_id) REFERENCES  RestaurantReview (restaurant_review_id)
     ON UPDATE cascade ON DELETE restrict
 );
