@@ -36,6 +36,20 @@ def get_restaurant_detail(id):
     the_response.mimetype = 'application/json'
     return the_response
 
+@restaurants.route('/restaurants/<restaurant_id>/reviews', methods=['GET'])
+def get_restaurant_reviews(restaurant_id):
+    cursor = db.get_db().cursor()
+    cursor.execute('SELECT * FROM RestaurantReview WHERE restaurant_id = ' + str(restaurant_id))
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
 
 @restaurants.route('/restaurants/<id>', methods=['DELETE'])
 def delete_restaurant(id):
