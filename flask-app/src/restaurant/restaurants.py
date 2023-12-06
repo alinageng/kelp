@@ -4,6 +4,20 @@ from .. import db
 
 restaurants = Blueprint('restaurants', __name__)
 
+@restaurants.route('/restaurants/<restaurant_id>/menu', methods=['GET'])
+def get_all_menu_items(restaurant_id):
+    cursor = db.get_db().cursor()
+    cursor.execute('SELECT name, mi.menu_item_id FROM Menu m JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id WHERE restaurant_id='+str(restaurant_id))
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(["label","value"], row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
 # Get all restaurants from the DB
 @restaurants.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -35,6 +49,22 @@ def get_restaurant_detail(id):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+@restaurants.route('/restaurants/<restaurant_id>/reviews', methods=['POST'])
+def add_restaurant_review(restaurant_id):
+    the_data = request.json
+
+    ### TODO implement endpoint
+
+    the_response = make_response(jsonify(the_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    print("THE RESPONSE:")
+    print(the_response.json, flush=True)
+    return the_response
+
+
+
 
 @restaurants.route('/restaurants/<restaurant_id>/reviews', methods=['GET'])
 def get_restaurant_reviews(restaurant_id):

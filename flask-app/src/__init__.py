@@ -39,6 +39,7 @@ def create_app():
     from .customers.customers import customers
     from .restaurant.restaurants import restaurants
     from .health_inspections.health_inspections import health_inspections
+    from .restaurant.menu import menu
 
 
     # Register the routes from each Blueprint with the app object
@@ -47,6 +48,7 @@ def create_app():
     #TODO review also starts with r
     app.register_blueprint(customers, url_prefix='/c')
     app.register_blueprint(restaurants, url_prefix='/r')
+    app.register_blueprint(menu, url_prefix='/m')
     app.register_blueprint(health_inspections, url_prefix='/hi')
 
 
