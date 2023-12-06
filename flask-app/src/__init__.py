@@ -40,6 +40,7 @@ def create_app():
     from .restaurant.restaurants import restaurants
     from .health_inspections.health_inspections import health_inspections
     from .restaurant.menu import menu
+    from .health_inspectors.health_inspectors import health_inspectors
 
 
     # Register the routes from each Blueprint with the app object
@@ -50,6 +51,7 @@ def create_app():
     app.register_blueprint(restaurants, url_prefix='/r')
     app.register_blueprint(menu, url_prefix='/m')
     app.register_blueprint(health_inspections, url_prefix='/hi')
+    app.register_blueprint(health_inspectors, url_prefix='/hii')
 
 
     # Don't forget to return the app object
