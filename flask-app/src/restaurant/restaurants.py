@@ -7,9 +7,24 @@ restaurants = Blueprint('restaurants', __name__)
 @restaurants.route('/restaurants/<restaurant_id>/promotions', methods=['GET'])
 def get_restaurants_promotions(restaurant_id):
     cursor = db.get_db().cursor()
-    cursor.execute(
-        'SELECT name, mi.menu_item_id FROM Menu m JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id WHERE restaurant_id=' + str(
-            restaurant_id))
+    cursor.execute('SELECT * FROM PromotionalEvent WHERE restaurant_id =' + str(restaurant_id))
+    json_data = []
+    theData = cursor.fetchall()
+    row_headers = [x[0] for x in cursor.description]
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+@restaurants.route('/menu/<menu_item_id>/', methods=['GET'])
+def get_menu_item(menu_item_id):
+    cursor = db.get_db().cursor()
+    cursor.execute("SELECT name, price, mi.menu_item_id, menu_type FROM Menu m \
+                   JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id \
+                   WHERE mi.menu_item_id={}".format(menu_item_id))
+
     json_data = []
     theData = cursor.fetchall()
     row_headers = [x[0] for x in cursor.description]
@@ -23,11 +38,16 @@ def get_restaurants_promotions(restaurant_id):
 @restaurants.route('/restaurants/<restaurant_id>/menu', methods=['GET'])
 def get_all_menu_items(restaurant_id):
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT name, mi.menu_item_id FROM Menu m JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id WHERE restaurant_id='+str(restaurant_id))
+    cursor.execute('SELECT name, price, mi.menu_item_id, menu_type FROM Menu m \
+                   JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id \
+                   WHERE restaurant_id={} ORDER BY menu_type'.format(restaurant_id))
+
+
     json_data = []
     theData = cursor.fetchall()
+    row_headers = [x[0] for x in cursor.description]
     for row in theData:
-        json_data.append(dict(zip(["label","value"], row)))
+        json_data.append(dict(zip(row_headers, row)))
     the_response = make_response(jsonify(json_data))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
@@ -157,10 +177,42 @@ def delete_restaurant(id):
 
     return 'Success!'
 
+@restaurants.route('/restaurants/<id>/menu', methods=['PUT'])
+def update_restaurant_menu(id):
+    the_data = request.json
+    current_app.logger.info(the_data)
+    print(the_data,flush=True)
+    # address
+    street = the_data['street']
+    address_line_2 = the_data['address_line_2']
+    city = the_data['city']
+    state = the_data['state']
+    # restaurant
+    name = the_data['restaurant_name']
+    description = the_data['description']
+    hours = the_data['hours']
+
+    query = ("UPDATE Restaurant " +
+             "SET restaurant_name = '" + name + "'," + "description = '" + description + "'," + "hours = '" + hours + "' " +
+             "WHERE restaurant_id = " + str(id))
+    current_app.logger.info(query)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    the_response = make_response(jsonify(the_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+    return 'Success!'
+
 @restaurants.route('/restaurants/<id>', methods=['PUT'])
 def update_restaurant(id):
     the_data = request.json
     current_app.logger.info(the_data)
+    print(the_data,flush=True)
     # address
     street = the_data['street']
     address_line_2 = the_data['address_line_2']
@@ -193,7 +245,13 @@ def update_restaurant(id):
     cursor.execute(query)
     db.get_db().commit()
 
+    the_response = make_response(jsonify(the_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
     return 'Success!'
+
 
 @restaurants.route('/restaurants', methods=['POST'])
 def add_new_restaurant():
