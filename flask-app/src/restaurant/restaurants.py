@@ -8,7 +8,6 @@ restaurants = Blueprint('restaurants', __name__)
 def get_all_menu_items(restaurant_id):
     cursor = db.get_db().cursor()
     cursor.execute('SELECT name, mi.menu_item_id FROM Menu m JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id WHERE restaurant_id='+str(restaurant_id))
-    row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
     for row in theData:
@@ -22,6 +21,7 @@ def get_all_menu_items(restaurant_id):
 @restaurants.route('/restaurants', methods=['GET'])
 def get_restaurants():
     cursor = db.get_db().cursor()
+    ## TODO add average rating
     cursor.execute('SELECT restaurant_id, restaurant_name, description, hours, street, address_line_2, city, state \
             FROM Restaurant r join Address a on r.address = a.address_id')
     row_headers = [x[0] for x in cursor.description]
@@ -54,16 +54,40 @@ def get_restaurant_detail(id):
 def add_restaurant_review(restaurant_id):
     the_data = request.json
 
-    ### TODO implement endpoint
+    # insert into reviews
+    rating = the_data['rating']
+    description = the_data['description']
+    restaurant_id = the_data['restaurant_id']
+    customer_id = the_data['customer_id']
+
+    query = ("INSERT INTO RestaurantReview (customer_id, restaurant_id, description, rating) "
+             "VALUES ({}, {}, '{}', {})".format(customer_id, restaurant_id, description, rating))
+    current_app.logger.info(query)
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    # retrieve id of review we just inserted
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    review_id = cursor.fetchone()[0]
+
+    menu_item_reviews = the_data['menu_item_reviews']
+    for mi_review in menu_item_reviews:
+        mi_rating = mi_review['rating']
+        mi_description = mi_review['description']
+        mi_id = mi_review['menu_item_id']
+
+        query = ("INSERT INTO MenuItemReview (menu_item_id, review_id, description, rating)  VALUES "
+                 "({}, {}, '{}', {})".format(mi_id, review_id, mi_description, mi_rating))
+        current_app.logger.info(query)
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        db.get_db().commit()
 
     the_response = make_response(jsonify(the_data))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
-    print("THE RESPONSE:")
-    print(the_response.json, flush=True)
     return the_response
-
-
 
 
 @restaurants.route('/restaurants/<restaurant_id>/reviews', methods=['GET'])

@@ -54,5 +54,4 @@ def create_app():
     app.register_blueprint(health_inspectors, url_prefix='/hii')
 
 
-    # Don't forget to return the app object
     return app

@@ -3,7 +3,7 @@
 -- Create a new database.  You can change the name later.  You'll
 -- need this name in the FLASK API file(s),  the AppSmith
 -- data source creation.
-drop database kelp_db;
+# drop database kelp_db;
 create database kelp_db;
 
 -- Via the Docker Compose file, a special user called webapp will
