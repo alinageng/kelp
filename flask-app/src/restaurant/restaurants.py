@@ -4,6 +4,22 @@ from .. import db
 
 restaurants = Blueprint('restaurants', __name__)
 
+@restaurants.route('/restaurants/<restaurant_id>/promotions', methods=['GET'])
+def get_restaurants_promotions(restaurant_id):
+    cursor = db.get_db().cursor()
+    cursor.execute(
+        'SELECT name, mi.menu_item_id FROM Menu m JOIN MenuItem mi ON m.menu_item_id = mi.menu_item_id WHERE restaurant_id=' + str(
+            restaurant_id))
+    json_data = []
+    theData = cursor.fetchall()
+    row_headers = [x[0] for x in cursor.description]
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
 @restaurants.route('/restaurants/<restaurant_id>/menu', methods=['GET'])
 def get_all_menu_items(restaurant_id):
     cursor = db.get_db().cursor()
@@ -22,8 +38,12 @@ def get_all_menu_items(restaurant_id):
 def get_restaurants():
     cursor = db.get_db().cursor()
     ## TODO add average rating
-    cursor.execute('SELECT restaurant_id, restaurant_name, description, hours, street, address_line_2, city, state \
-            FROM Restaurant r join Address a on r.address = a.address_id')
+    cursor.execute('SELECT R.restaurant_id, Rest.restaurant_name, Rest.description, Rest.hours, A.street, A.address_line_2, A.city, A.state, AVG(RR.rating) AS average_rating \
+                    FROM RestaurantReview RR \
+                    JOIN Restaurant R ON RR.restaurant_id = R.restaurant_id \
+                    JOIN Address A ON R.address = A.address_id \
+                    JOIN Restaurant Rest ON Rest.restaurant_id = R.restaurant_id\
+                    GROUP BY R.restaurant_id, Rest.restaurant_name, Rest.description, Rest.hours, A.street, A.address_line_2, A.city, A.state;')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -37,8 +57,14 @@ def get_restaurants():
 @restaurants.route('/restaurants/<id>', methods=['GET'])
 def get_restaurant_detail(id):
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT restaurant_name, description, hours, street, address_line_2, city, state \
-            FROM Restaurant r join Address a on r.address = a.address_id WHERE restaurant_id =' + str(id))
+    cursor.execute("SELECT R.restaurant_id, Rest.restaurant_name, Rest.description, Rest.hours, A.street, A.address_line_2, A.city, A.state, AVG(RR.rating) AS average_rating \
+                       FROM RestaurantReview RR \
+                       JOIN Restaurant R ON RR.restaurant_id = R.restaurant_id \
+                       JOIN Address A ON R.address = A.address_id \
+                       JOIN Restaurant Rest ON Rest.restaurant_id = R.restaurant_id\
+                       WHERE R.restaurant_id = {} \
+                       GROUP BY R.restaurant_id, Rest.restaurant_name, Rest.description, Rest.hours, A.street, A.address_line_2, A.city, A.state".format(id))
+
     row_headers = [x[0] for x in cursor.description]
 
     theData = cursor.fetchall()
