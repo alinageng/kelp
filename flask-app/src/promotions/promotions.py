@@ -24,9 +24,9 @@ def get_promotions():
 @promotions.route('/promotions/<restaurant_id>', methods=['GET'])
 def get_promotions_by_restaurant(restaurant_id):
     cursor = db.get_db().cursor()
-    query = ('SELECT *' +
-        'FROM PromotionalEvent' +
-        'WHERE PromotionalEvent.restaurant_id =' + str(restaurant_id))
+    query = ('SELECT * ' +
+        'FROM PromotionalEvent ' +
+        'WHERE PromotionalEvent.restaurant_id = ' + str(restaurant_id))
 
     cursor = db.get_db().cursor()
     cursor.execute(query)

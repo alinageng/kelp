@@ -7,10 +7,10 @@ menu = Blueprint('menu', __name__)
 @menu.route('/restaurants/<restaurant_id>/menu', methods=['GET'])
 def get_menus(restaurant_id):
     cursor = db.get_db().cursor()
-    query = ('SELECT *' +
-        'FROM Menu' +
-        'WHERE Menu.restaurant_id =' + str(restaurant_id))
-
+    query = ('SELECT * ' +
+        'FROM Menu ' +
+        'WHERE Menu.restaurant_id = ' + str(restaurant_id))
+    
     cursor = db.get_db().cursor()
     cursor.execute(query)
     row_headers = [x[0] for x in cursor.description]
@@ -30,17 +30,22 @@ def add_new_menu():
     # collecting data from the request object
     the_data = request.json
     current_app.logger.info(the_data)
+    print("hi person")
 
     #extracting the variable
-    menu_id = the_data['menu_id']
+    # menu_id = the_data['menu_id']
     restaurant_id = the_data['restaurant_id']
     menu_type = the_data['menu_type']
 
     # Constructing the query
-    query = 'insert into Menu (menu_id, restaurant_id, menu_type) values ("'
-    query += menu_id + '", "'
+    query = 'insert into Menu (restaurant_id, menu_type) values ("'
+    # query += menu_id + '", "'
     query += restaurant_id + '", '
     query += menu_type + ')'
+
+    print(query)
+    
+
     current_app.logger.info(query)
 
     # executing and committing the insert statement
@@ -49,7 +54,7 @@ def add_new_menu():
     db.get_db().commit()
 
     return 'Success!'
-    
+
 ### TODO HAVEN'T tested these yet. waiting for data. also restaurant_id doesn't get used.
 @menu.route('/restaurants/<restaurant_id>/menu/<menu_item_id>', methods=['PUT'])
 def update_restaurant(restaurant_id, menu_item_id):
