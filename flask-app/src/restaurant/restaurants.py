@@ -8,7 +8,7 @@ restaurants = Blueprint('restaurants', __name__)
 @restaurants.route('/restaurants', methods=['GET'])
 def get_restaurants():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT restaurant_name, description, hours, street, address_line_2, city, state \
+    cursor.execute('SELECT restaurant_id, restaurant_name, description, hours, street, address_line_2, city, state \
             FROM Restaurant r join Address a on r.address = a.address_id')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
