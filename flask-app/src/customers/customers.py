@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from .. import db
 
@@ -46,24 +46,26 @@ def delete_customer(customer_id):
 
 # # post a new review for a restaurant
 # @customers.route('/customers/<customer_id>/reviews/<restaurant_id>', methods=['POST'])
-# def post_a_restaurant_review():
+# def post_a_restaurant_review(customer_id, restaurant_id):
 #
 #     # collecting data from the request object
 #     the_data = request.json
 #     current_app.logger.info(the_data)
 #
+#
 #     #extracting the variable
-#     name = the_data['product_name']
-#     description = the_data['product_description']
-#     price = the_data['product_price']
-#     category = the_data['product_category']
+#     description = the_data['description']
+#     rating = the_data['rating']
+#     date = the_data['date']
+#
 #
 #     # Constructing the query
-#     query = 'insert into products (product_name, description, category, list_price) values ("'
-#     query += name + '", "'
-#     query += description + '", "'
-#     query += category + '", '
-#     query += str(price) + ')'
+#     query = 'insert into RestaurantReview (restaurant_review_id, customer_id, restaurant_id, description, rating, date) values ('
+#     query += str(customer_id) + ', '
+#     query += str(restaurant_id) + ', "'
+#     query += description + '", '
+#     query += str(rating) + ', "'
+#     query += str(date) + '")'
 #     current_app.logger.info(query)
 #
 #     # executing and committing the insert statement
@@ -72,3 +74,27 @@ def delete_customer(customer_id):
 #     db.get_db().commit()
 #
 #     return 'Success!'
+#
+#
+# # delete a customer's review
+# @customers.route('/customers/<customer_id>', methods=['DELETE'])
+# def delete_customer(customer_id):
+#     try:
+#         query = 'DELETE FROM RestaurantReview WHERE customer_id = ' + str(customer_id)
+#
+#         cursor = db.get_db().cursor()
+#         cursor.execute(query)
+#         db.get_db().commit()
+#
+#         response_data = {
+#             'message': 'Successfully deleted customer',
+#             'status': 200
+#         }
+#         return jsonify(response_data), 200
+#
+#     except Exception as e:
+#         error_message = {
+#             'error': str(e),
+#             'status': 500
+#         }
+#         return jsonify(error_message), 500
