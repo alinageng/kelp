@@ -43,6 +43,8 @@ def get_all_menu_items_for_posting_review(restaurant_id):
             restaurant_id))
     json_data = []
     theData = cursor.fetchall()
+    print("THE DATA", flush=True)
+    print(theData, flush=True)
     for row in theData:
         json_data.append(dict(zip(["label", "value"], row)))
     the_response = make_response(jsonify(json_data))
