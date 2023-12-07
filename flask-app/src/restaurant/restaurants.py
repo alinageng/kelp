@@ -43,8 +43,7 @@ def get_all_menu_items_for_posting_review(restaurant_id):
             restaurant_id))
     json_data = []
     theData = cursor.fetchall()
-    print("THE DATA", flush=True)
-    print(theData, flush=True)
+
     for row in theData:
         json_data.append(dict(zip(["label", "value"], row)))
     the_response = make_response(jsonify(json_data))
@@ -105,8 +104,7 @@ def get_restaurant_detail(id):
 
     theData = cursor.fetchall()
     json_data = {}
-    print("LOOK HERE", flush=True)
-    print(theData, flush=True)
+
     for row_header, row_data in zip(row_headers, theData[0]):
         json_data[row_header] = row_data
     the_response = make_response(jsonify(json_data))
@@ -199,7 +197,6 @@ def delete_restaurant(id):
 def update_menu_item(id):
     the_data = request.json
     current_app.logger.info(the_data)
-    print(the_data,flush=True)
 
     price = the_data['price']
     menu_id = the_data['menu_id']
@@ -222,7 +219,7 @@ def update_menu_item(id):
 def update_restaurant(id):
     the_data = request.json
     current_app.logger.info(the_data)
-    print(the_data,flush=True)
+
     # address
     street = the_data['street']
     address_line_2 = the_data['address_line_2']

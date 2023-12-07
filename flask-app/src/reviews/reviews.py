@@ -8,8 +8,6 @@ reviews = Blueprint('reviews', __name__)
 @reviews.route('/reviews', methods=['GET'])
 def get_reviews():
     cursor = db.get_db().cursor()
-    # cursor.execute('SELECT company, last_name,\
-    #     first_name, job_title, business_phone FROM customers')
     cursor.execute('SELECT  FROM customers')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
@@ -66,8 +64,6 @@ def get_a_review(id):
 @reviews.route('/reviews/<id>', methods=['PUT'])
 def edit_a_review(id):
     the_data = request.json
-    print("EDITN A REVIEW", flush=True)
-    print(the_data,flush=True)
 
     # insert into reviews
     rating = the_data['rating']

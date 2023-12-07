@@ -62,7 +62,6 @@ def add_new_health_inspection():
     query += str(restaurant_id) + ', "'
     query += str(date) + '", '
     query += str(grade) + ')'
-    print(query)
     current_app.logger.info(query)
 
     # executing and committing the insert statement
