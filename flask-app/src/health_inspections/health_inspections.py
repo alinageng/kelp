@@ -8,7 +8,8 @@ health_inspections = Blueprint('health_inspections', __name__)
 @health_inspections.route('/health_inspections', methods=['GET'])
 def get_health_inspections():
 
-    query = 'SELECT hi.health_inspection_id, hi.inspector_id, hi.restaurant_id, hi.date, hi.grade, r.restaurant_name FROM HealthInspection as hi JOIN Restaurant as r on r.restaurant_id = hi.restaurant_id'
+    query = ('SELECT hi.health_inspection_id, hi.inspector_id, hi.restaurant_id, hi.date, hi.grade, r.restaurant_name \
+             FROM HealthInspection as hi JOIN Restaurant as r on r.restaurant_id = hi.restaurant_id')
 
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -25,7 +26,9 @@ def get_health_inspections():
 # Get health inspection detail for a restaurant with particular restaurant_id
 @health_inspections.route('/health_inspections/<restaurant_id>', methods=['GET'])
 def get_health_inspection_by_restaurant(restaurant_id):
-    query = 'SELECT * FROM HealthInspection WHERE restaurant_id = ' + str(restaurant_id)
+    query = "SELECT * FROM HealthInspection h \
+             JOIN HealthInspector i ON h.inspector_id = i.inspector_id \
+             WHERE restaurant_id =" + str(restaurant_id)
 
     cursor = db.get_db().cursor()
     cursor.execute(query)

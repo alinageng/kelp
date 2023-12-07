@@ -19,6 +19,19 @@ def get_customers():
     the_response.mimetype = 'application/json'
     return the_response
 
+@customers.route('/customers/<id>', methods=['GET'])
+def get_a_customer(id):
+    cursor = db.get_db().cursor()
+    cursor.execute("SELECT * FROM Customer WHERE customer_id = {}".format(id))
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data[0]))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
 
 # delete a customer with given customer_id
 @customers.route('/customers/<customer_id>', methods=['DELETE'])

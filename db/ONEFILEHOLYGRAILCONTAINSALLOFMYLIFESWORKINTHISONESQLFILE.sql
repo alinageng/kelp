@@ -6,20 +6,11 @@
 drop database kelp_db;
 create database kelp_db;
 
--- Via the Docker Compose file, a special user called webapp will
--- be created in MySQ L. We are going to g rant that user
--- all privilages to the new database we just created.
--- TODO: If you changed the name of the database above, you need
--- to change it here too.
 grant all privileges on cool_db.* to 'webapp'@'%';
 flush privileges;
 
--- Move into the database we just created.
--- TODO: If you changed the name of the database above, you need to
--- change it here too.
 use kelp_db;
 
--- Put your DDL
 CREATE TABLE IF NOT EXISTS Customer (
     customer_id int PRIMARY KEY AUTO_INCREMENT,
     first_name varchar(50) NOT NULL,
@@ -134,7 +125,7 @@ CREATE TABLE IF NOT EXISTS MenuItemReview (
     FOREIGN KEY (menu_item_id) REFERENCES MenuItem (menu_item_id)
     ON UPDATE cascade ON DELETE restrict,
     FOREIGN KEY (review_id) REFERENCES  RestaurantReview (restaurant_review_id)
-    ON UPDATE cascade ON DELETE restrict
+    ON UPDATE cascade ON DELETE cascade
 );
 
 
