@@ -243,10 +243,7 @@ def update_restaurant(id):
     cursor.execute('SELECT address FROM Restaurant WHERE restaurant_id =' + str(id))
     address_id = cursor.fetchone()[0]
 
-    query = ("UPDATE Address " +
-             "SET street = '" + street + "'," + "address_line_2 = '" + address_line_2 + "'," + "city = '" + city +
-             "'," + "state = '" + state + "' " +
-             "WHERE address_id = " + str(address_id))
+    query = ("UPDATE Address SET street = '{}', address_line_2 = '{}', city = '{}', state = '{}' WHERE address_id = {}".format(street, address_line_2, city, state, address_id))
     current_app.logger.info(query)
     cursor = db.get_db().cursor()
     cursor.execute(query)
