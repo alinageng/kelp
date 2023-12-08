@@ -112,3 +112,25 @@ def add_new_health_inspection():
     db.get_db().commit()
 
     return 'Success!'
+
+# update the grade of the given health inspection.
+@health_inspections.route('/health_inspections/<health_inspection_id>', methods=['PUT'])
+def update_health_inspection(health_inspection_id):
+    the_data = request.json
+    current_app.logger.info(the_data)
+
+    grade = the_data['grade']
+
+    query = ("UPDATE HealthInspection SET grade = '{}' WHERE health_inspection_id = {}".format(grade, health_inspection_id))
+    current_app.logger.info(query)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    the_response = make_response(jsonify(the_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+    return 'Success!'
