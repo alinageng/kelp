@@ -1046,6 +1046,8 @@ INSERT INTO HealthInspector (inspector_id, first_name, last_name, email) VALUES
 
 
 insert into HealthInspection (inspector_id, restaurant_id, date, grade) values (23, 11, '2022-05-03 22:17:33', 'B');
+insert into HealthInspection (inspector_id, restaurant_id, date, grade) values (23, 1, '2022-05-03 22:17:33', 'D');
+insert into HealthInspection (inspector_id, restaurant_id, date, grade) values (23, 1, '2023-05-03 22:17:33', 'B');
 insert into HealthInspection (inspector_id, restaurant_id, date, grade) values (2, 34, '2023-01-03 11:54:54', 'C');
 insert into HealthInspection (inspector_id, restaurant_id, date, grade) values (48, 15, '2022-02-27 03:35:25', 'A');
 insert into HealthInspection (inspector_id, restaurant_id, date, grade) values (1, 10, '2023-08-26 15:44:30', 'C');

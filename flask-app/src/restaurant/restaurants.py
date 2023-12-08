@@ -113,9 +113,6 @@ def get_restaurant_detail(id):
     return the_response
 
 
-
-
-
 @restaurants.route('/restaurants/<id>', methods=['DELETE'])
 def delete_restaurant(id):
     query = 'DELETE FROM Restaurant WHERE restaurant_id = ' + str(id)
@@ -189,7 +186,6 @@ def update_restaurant(id):
     return the_response
 
     return 'Success!'
-
 
 @restaurants.route('/restaurants', methods=['POST'])
 def add_new_restaurant():
