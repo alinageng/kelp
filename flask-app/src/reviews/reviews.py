@@ -106,3 +106,42 @@ def delete_reviews(id):
     db.get_db().commit()
 
     return 'Success!'
+
+@reviews.route('/restaurants/<restaurant_id>/reviews', methods=['POST'])
+def post_restaurant_review(restaurant_id):
+    the_data = request.json
+
+    # insert into reviews
+    rating = the_data['rating']
+    description = the_data['description']
+    restaurant_id = the_data['restaurant_id']
+    customer_id = the_data['customer_id']
+
+    query = ("INSERT INTO RestaurantReview (customer_id, restaurant_id, description, rating) "
+             "VALUES ({}, {}, '{}', {})".format(customer_id, restaurant_id, description, rating))
+    current_app.logger.info(query)
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    # retrieve id of review we just inserted
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    review_id = cursor.fetchone()[0]
+
+    menu_item_reviews = the_data['menu_item_reviews']
+    for mi_review in menu_item_reviews:
+        mi_rating = mi_review['rating']
+        mi_description = mi_review['description']
+        mi_id = mi_review['menu_item_id']
+
+        query = ("INSERT INTO MenuItemReview (menu_item_id, review_id, description, rating)  VALUES "
+                 "({}, {}, '{}', {})".format(mi_id, review_id, mi_description, mi_rating))
+        current_app.logger.info(query)
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        db.get_db().commit()
+
+    the_response = make_response(jsonify(the_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
