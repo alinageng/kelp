@@ -33,7 +33,6 @@ def get_restaurant_owner_by_id(id):
     the_response.mimetype = 'application/json'
     return the_response
 
-<<<<<<< HEAD
 # post a restaurant owner
 @restaurant_owner.route('/restaurant_owner', methods=['POST'])
 def add_new_restaurant_owner():
@@ -58,20 +57,18 @@ def add_new_restaurant_owner():
 
     current_app.logger.info(query)
 
-    # executing and committing the insert statement
-=======
+    return "Success!"
+
+
 @restaurant_owner.route('/restaurant_owners/<id>', methods=['DELETE'])
 def delete_restaurant_owner(id):
     query = 'DELETE FROM RestaurantOwnerAccount WHERE restaurant_owner_id = ' + str(id)
     current_app.logger.info(query)
 
->>>>>>> 00bfcbc91376955642e7bc4435432ef8477d1027
     cursor = db.get_db().cursor()
     cursor.execute(query)
     db.get_db().commit()
 
-<<<<<<< HEAD
-=======
     return 'Success!'
 
 @restaurant_owner.route('/restaurant_owners/<id>', methods=['PUT'])
@@ -96,6 +93,3 @@ def update_restaurant_owner(id):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
-
->>>>>>> 00bfcbc91376955642e7bc4435432ef8477d1027
-    return 'Success!'
