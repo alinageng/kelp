@@ -1,6 +1,9 @@
 # Kelp
 ## CS3200 Final Project
 
+PRESENTATION VIDEO:
+https://youtu.be/oga2nFuB2rM 
+
 
 ## How to setup and start the containers
 **Important** - you need Docker Desktop installed
