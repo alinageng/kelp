@@ -7,7 +7,6 @@ health_inspections = Blueprint('health_inspections', __name__)
 # Get all health inspections from the DB
 @health_inspections.route('/health_inspections/asc', methods=['GET'])
 def get_health_inspections_asc():
-
     query = 'SELECT hi.health_inspection_id, hi.inspector_id, hi.restaurant_id, hi.date, hi.grade, r.restaurant_name FROM HealthInspection as hi JOIN Restaurant as r on r.restaurant_id = hi.restaurant_id order by hi.grade asc'
 
     cursor = db.get_db().cursor()
@@ -45,6 +44,7 @@ def get_health_inspections_desc():
 def get_health_inspection_by_restaurant(restaurant_id):
     query = "SELECT * FROM HealthInspection WHERE restaurant_id = {}".format(restaurant_id)
 
+
     cursor = db.get_db().cursor()
     cursor.execute(query)
     row_headers = [x[0] for x in cursor.description]
@@ -78,6 +78,7 @@ def add_new_health_inspection():
     query += str(restaurant_id) + ",'"
     query += str(grade) + "')"
     print(query)
+
     current_app.logger.info(query)
 
     # executing and committing the insert statement

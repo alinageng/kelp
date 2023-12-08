@@ -43,6 +43,7 @@ def get_all_menu_items_for_posting_review(restaurant_id):
             restaurant_id))
     json_data = []
     theData = cursor.fetchall()
+
     for row in theData:
         json_data.append(dict(zip(["label", "value"], row)))
     the_response = make_response(jsonify(json_data))
@@ -103,8 +104,7 @@ def get_restaurant_detail(id):
 
     theData = cursor.fetchall()
     json_data = {}
-    print("LOOK HERE", flush=True)
-    print(theData, flush=True)
+
     for row_header, row_data in zip(row_headers, theData[0]):
         json_data[row_header] = row_data
     the_response = make_response(jsonify(json_data))
@@ -197,7 +197,6 @@ def delete_restaurant(id):
 def update_menu_item(id):
     the_data = request.json
     current_app.logger.info(the_data)
-    print(the_data,flush=True)
 
     price = the_data['price']
     menu_id = the_data['menu_id']
@@ -220,7 +219,7 @@ def update_menu_item(id):
 def update_restaurant(id):
     the_data = request.json
     current_app.logger.info(the_data)
-    print(the_data,flush=True)
+
     # address
     street = the_data['street']
     address_line_2 = the_data['address_line_2']
@@ -244,10 +243,7 @@ def update_restaurant(id):
     cursor.execute('SELECT address FROM Restaurant WHERE restaurant_id =' + str(id))
     address_id = cursor.fetchone()[0]
 
-    query = ("UPDATE Address " +
-             "SET street = '" + street + "'," + "address_line_2 = '" + address_line_2 + "'," + "city = '" + city +
-             "'," + "state = '" + state + "' " +
-             "WHERE address_id = " + str(address_id))
+    query = ("UPDATE Address SET street = '{}', address_line_2 = '{}', city = '{}', state = '{}' WHERE address_id = {}".format(street, address_line_2, city, state, address_id))
     current_app.logger.info(query)
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -340,34 +336,7 @@ def get_customer_reviews(customer_id):
     return the_response
 
 
-@restaurants.route('/restaurants/review/<restaurant_review_id>', methods=['GET'])
-def get_review(restaurant_review_id):
-    output = []
-    cursor = db.get_db().cursor()
-    cursor.execute('SELECT * \
-                        FROM RestaurantReview RR \
-                       WHERE RR.restaurant_review_id = ' + str(restaurant_review_id))
 
-    review_row_headers = [x[0] for x in cursor.description]
-    reviews = cursor.fetchall()
-    for review_row in reviews:
-        menu_item_reviews_json = []
-        restaurant_review_id = review_row[0]
-        cursor.execute('SELECT description, rating, menu_item_review_id, name FROM MenuItemReview NATURAL JOIN MenuItem WHERE review_id = ' + str(restaurant_review_id))
-
-        menu_item_review_row_headers = [x[0] for x in cursor.description]
-        menu_item_reviews = cursor.fetchall()
-        for menu_item_review_row in menu_item_reviews:
-            menu_item_reviews_json.append(dict(zip(menu_item_review_row_headers, menu_item_review_row)))
-
-        review_row_headers.append("menu_item_reviews")
-        review_row = review_row + (menu_item_reviews_json,)
-        output.append(dict(zip(review_row_headers, review_row)))
-
-    the_response = make_response(jsonify(output[0]))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
 
 
 @restaurants.route('/restaurants/<restaurant_review_id>', methods=['PUT'])
