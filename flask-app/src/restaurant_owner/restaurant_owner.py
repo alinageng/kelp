@@ -33,6 +33,20 @@ def get_restaurant_owner_by_id(id):
     the_response.mimetype = 'application/json'
     return the_response
 
+@restaurant_owner.route('/restaurant_owners/<restaurant_id>', methods=['GET'])
+def get_restaurant_owner_by_restaurant_id(restaurant_id):
+    cursor = db.get_db().cursor()
+    cursor.execute("SELECT * FROM RestaurantOwnerAccount WHERE restaurant_id={}".format(restaurant_id))
+    json_data = []
+    row_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
 # post a restaurant owner
 @restaurant_owner.route('/restaurant_owner', methods=['POST'])
 def add_new_restaurant_owner():
