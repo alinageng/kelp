@@ -4,6 +4,29 @@ from .. import db
 
 health_inspections = Blueprint('health_inspections', __name__)
 
+
+@health_inspections.route('/health_inspectors', methods=['GET'])
+def get_health_inspectors():
+
+    query = "SELECT inspector_id, CONCAT(first_name, ' ', last_name) FROM HealthInspector"
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+
+
+    print("the data", flush=True)
+    print(theData, flush=True)
+    for row in theData:
+        json_data.append(dict(zip(["value","label"], row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+
 # Get all health inspections from the DB
 @health_inspections.route('/health_inspections_asc', methods=['GET'])
 def get_health_inspections_asc():

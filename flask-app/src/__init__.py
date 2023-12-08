@@ -38,7 +38,6 @@ def create_app():
     from .customers.customers import customers
     from .restaurant.restaurants import restaurants
     from .health_inspections.health_inspections import health_inspections
-    from .health_inspectors.health_inspectors import health_inspectors
     from .restaurant_owner.restaurant_owner import restaurant_owner
     from .reviews.reviews import reviews
 
@@ -46,7 +45,6 @@ def create_app():
     app.register_blueprint(customers, url_prefix='/c')
     app.register_blueprint(restaurants, url_prefix='/r')
     app.register_blueprint(health_inspections, url_prefix='/hi')
-    app.register_blueprint(health_inspectors, url_prefix='/hii')
     app.register_blueprint(restaurant_owner, url_prefix='/ro')
     app.register_blueprint(reviews, url_prefix='/re')
 
