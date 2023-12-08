@@ -87,3 +87,63 @@ def delete_customer(customer_id):
         }
         return jsonify(error_message), 500
 
+# update a customer
+@customers.route('/customers/<customer_id>', methods=['PUT'])
+def update_customer(customer_id):
+    the_data = request.json
+    current_app.logger.info(the_data)
+
+    first_name = the_data['first_name']
+    last_name = the_data['last_name']
+    email = the_data['email']
+    phone = the_data['phone']
+    member_since = the_data['member_since']
+
+    query = ("UPDATE Customer " +
+             "SET first_name = '" + first_name + "'," + "last_name = '" + last_name + "'," + "email = '" + email + 
+             "' " + "phone = '" + phone + "' " + "member_since = '" + member_since + "' " +
+             "WHERE customer_id = " + str(customer_id))
+    current_app.logger.info(query)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    the_response = make_response(jsonify(the_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+    return 'Success!'
+
+
+# post a customer
+@customers.route('/customers', methods=['POST'])
+def add_new_customer():
+
+    # collecting data from the request object
+    the_data = request.json
+    current_app.logger.info(the_data)
+
+    #extracting the variable
+    first_name = the_data['first_name']
+    last_name = the_data['last_name']
+    email = the_data['email']
+    phone = the_data['phone']
+
+    # Constructing the query
+    query = "insert into Customer (first_name, last_name, email, phone) values ("
+    query += str(first_name) + ","
+    query += str(last_name) + ",'"
+    query += str(email) + ",'"
+    query += str(phone) + "')"
+    print(query)
+
+    current_app.logger.info(query)
+
+    # executing and committing the insert statement
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    return 'Success!'
