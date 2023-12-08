@@ -343,13 +343,11 @@ def get_customer_reviews(customer_id):
 def update_review(restaurant_review_id):
     the_data = request.json
     current_app.logger.info(the_data)
-    
 
-    customer_id = the_data['street']
-    date = the_data['address_line_2']
-    description = the_data['city']
-    rating = the_data['state']
-    restaurant_id = the_data['']
+    street = the_data['street']
+    address_line_2 = the_data['address_line_2']
+    city = the_data['city']
+    state = the_data['state']
 
     # restaurant
     name = the_data['restaurant_name']
