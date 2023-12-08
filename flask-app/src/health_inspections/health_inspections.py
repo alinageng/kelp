@@ -5,7 +5,7 @@ from .. import db
 health_inspections = Blueprint('health_inspections', __name__)
 
 # Get all health inspections from the DB
-@health_inspections.route('/health_inspections/asc', methods=['GET'])
+@health_inspections.route('/health_inspections_asc', methods=['GET'])
 def get_health_inspections_asc():
     query = 'SELECT hi.health_inspection_id, hi.inspector_id, hi.restaurant_id, hi.date, hi.grade, r.restaurant_name FROM HealthInspection as hi JOIN Restaurant as r on r.restaurant_id = hi.restaurant_id order by hi.grade asc'
 
@@ -22,7 +22,7 @@ def get_health_inspections_asc():
     return the_response
 
 # Get all health inspections from the DB
-@health_inspections.route('/health_inspections/desc', methods=['GET'])
+@health_inspections.route('/health_inspections_desc', methods=['GET'])
 def get_health_inspections_desc():
 
     query = 'SELECT hi.health_inspection_id, hi.inspector_id, hi.restaurant_id, hi.date, hi.grade, r.restaurant_name FROM HealthInspection as hi JOIN Restaurant as r on r.restaurant_id = hi.restaurant_id order by hi.grade desc'
@@ -42,7 +42,9 @@ def get_health_inspections_desc():
 # Get health inspection detail for a restaurant with particular restaurant_id
 @health_inspections.route('/health_inspections/<restaurant_id>', methods=['GET'])
 def get_health_inspection_by_restaurant(restaurant_id):
-    query = "SELECT * FROM HealthInspection WHERE restaurant_id = {}".format(restaurant_id)
+    query = "SELECT * FROM HealthInspection h \
+             JOIN HealthInspector i ON h.inspector_id = i.inspector_id \
+             WHERE restaurant_id =" + str(restaurant_id)
 
 
     cursor = db.get_db().cursor()
