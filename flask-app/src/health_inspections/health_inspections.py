@@ -134,3 +134,14 @@ def update_health_inspection(health_inspection_id):
     return the_response
 
     return 'Success!'
+
+@health_inspections.route('/health_inspections/<health_inspection_id>', methods=['DELETE'])
+def delete_health_inspection(health_inspection_id):
+    query = 'DELETE FROM HealthInspection WHERE health_inspection_id = ' + str(health_inspection_id)
+    current_app.logger.info(query)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    return 'Success!'
