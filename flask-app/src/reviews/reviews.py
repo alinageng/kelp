@@ -96,3 +96,13 @@ def edit_a_review(id):
     the_response.mimetype = 'application/json'
     return the_response
 
+@reviews.route('/reviews/<id>', methods=['DELETE'])
+def delete_reviews(id):
+    query = 'DELETE FROM RestaurantReview WHERE restaurant_review_id = ' + str(id)
+    current_app.logger.info(query)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    return 'Success!'
