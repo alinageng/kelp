@@ -32,3 +32,34 @@ def get_restaurant_owner_by_id(id):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+# post a restaurant owner
+@restaurant_owner.route('/restaurant_owner', methods=['POST'])
+def add_new_restaurant_owner():
+
+    # collecting data from the request object
+    the_data = request.json
+    current_app.logger.info(the_data)
+
+    #extracting the variable
+    restaurant_id = the_data['restaurant_id']
+    first_name = the_data['first_name']
+    last_name = the_data['last_name']
+    email = the_data['email']
+
+    # Constructing the query
+    query = "insert into HealthInspection (restaurant_id, first_name, last_name, email) values ("
+    query += str(restaurant_id) + ", '"
+    query += first_name + "', '"
+    query += last_name + "', '"
+    query += email + "')"
+    print(query)
+
+    current_app.logger.info(query)
+
+    # executing and committing the insert statement
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+
+    return 'Success!'
