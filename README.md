@@ -12,14 +12,12 @@ https://github.com/alinageng/kelp_frontend
 - Open terminal
 - Git Clone this repo on your machine
 - Make sure to git clone the front end repository (link included above)
-- Use the cd command to navigate into the newly clone kelp folder
+- Run `cd kelp`
 - Run the command `docker compose build`
 - Then run the command `docker compose up -d`
-- Once these two commands have been run, navigate to your machine's localhost on your chosen browser
-- Using Kelp endpoints you can get data from our platform. Here is an example: http://localhost:8001/re/reviews (paste this link into your browser and you should see all of the reviews on kelp)
-- Go to the link http://localhost:8080/applications
-- You will see kelp_frontend under Apps. Click launch and you should be all set to start using Kelp
-
+- Once these two commands have been run, navigate to your machine's browser
+- Go to http://localhost:8001/re/reviews to verify the backend is running. You should see a Json array of all the reviews on Kelp
+- To use the UI, go to http://localhost:8080/applications. You will see kelp_frontend under Apps. Click launch and you should be all set to start using Kelp
 
 
 PRESENTATION VIDEO:
