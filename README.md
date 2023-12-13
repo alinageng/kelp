@@ -1,6 +1,27 @@
 # Kelp
 ## CS3200 Final Project
 
+### Project Overview:
+Introducing "Kelp," our innovative platform designed to revolutionize the restaurant review experience. Kelp empowers restaurants to showcase their business by sharing essential information, including operating hours, menus, and locations. Meanwhile, customers can seamlessly rate and review their dining experiences, providing valuable feedback and insights. Health inspectors also have the capability to submit health grades, ensuring transparency and accountability. Moreover, Kelp hosts exciting promotional events, enticing customers to explore new dining establishments and share their feedback on the platform.
+
+In this repo you will find all of the code for the backend of kelp.
+If you would like to view the code for the front-end please navigate to the github repository below:
+https://github.com/alinageng/kelp_frontend
+
+### How to start this project:
+- Open terminal
+- Git Clone this repo on your machine
+- Make sure to git clone the front end repository (link included above)
+- Use the cd command to navigate into the newly clone kelp folder
+- Run the command `docker compose build`
+- Then run the command `docker compose up -d`
+- Once these two commands have been run, navigate to your machine's localhost on your chosen browser
+- Using Kelp endpoints you can get data from our platform. Here is an example: http://localhost:8001/re/reviews (paste this link into your browser and you should see all of the reviews on kelp)
+- Go to the link http://localhost:8080/applications
+- You will see kelp_frontend under Apps. Click launch and you should be all set to start using Kelp
+
+
+
 PRESENTATION VIDEO:
 https://youtu.be/oga2nFuB2rM 
 
